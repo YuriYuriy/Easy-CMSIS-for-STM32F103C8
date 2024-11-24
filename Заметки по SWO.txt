@@ -1,0 +1,30 @@
+ITM_SendChar(); - отладчик по SWO использовать с ковычкакми
+
+Использовать с настройкой:
+
+void STM_ini_SW(void)
+{
+	RCC->APB2ENR |= RCC_APB2ENR_AFIOEN; 				// Включит алетренативные функции
+	AFIO->MAPR |= AFIO_MAPR_SWJ_CFG_JTAGDISABLE;		// JTAG-DP отключен, SW-DP включен
+}
+
+Для использования printf():
+
+int __io_putchar(int ch)
+{
+	ITM_SendChar(ch);
+	return ch;
+}
+
+int main()
+{	
+	uint32_t a = 0;
+	
+	printf("Hellow World :)\r\n");
+	
+	while(1)
+	{
+		a=a+1;
+		printf("Counter = %d\n", a);
+	}
+}
